@@ -70,12 +70,14 @@
     bottom: 200px;
     left: 0;
     right: 0;
+    opacity: 0;
     display: flex;
     margin: auto;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 3rem;
+    transition: all ease 0.6s;
     font-weight: bold;
     font-family: 'Times New Roman', Times, serif;
     user-select: none;

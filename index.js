@@ -22,7 +22,7 @@ const WASD = {
 }
 
 class Sprite {
-    constructor(position, speed, color, height, width, lastKey, attackBox, attacking, cooldown, life, damage,name) {
+    constructor(position, speed, color, height, width, lastKey, attackBox, attacking, cooldown, life, damage, name) {
         this.position = position;
         this.speed = speed;
         this.color = color;
@@ -74,8 +74,15 @@ class Sprite {
         this.draw()
         if (this.position.y + this.height + this.speed.y >= canvas.height || this.position.y + this.height + this.speed.y <= this.height) {
             this.speed.y = 0;
-        } else {
+        } else {    
             this.speed.y += GRAVITY;
+        }
+        if (this.position.x <= 0) {
+            this.position.x=0
+            this.speed.x = 0
+        }else if( this.position.x + this.width >= canvas.width){
+            this.position.x=canvas.width-this.width
+            this.speed.x = 0
         }
     }
 
@@ -97,7 +104,7 @@ const player = new Sprite(
     1000,
     { maxHealth: 100, currentLife: 100 },
     5,
-    'PENECITA'
+    'PLAYER'
 )
 const enemy = new Sprite(
     { x: 975, y: 0 },
@@ -111,7 +118,7 @@ const enemy = new Sprite(
     1000,
     { maxHealth: 100, currentLife: 100 },
     5,
-    'MAPEAN'
+    'ENEMY'
 )
 
 
@@ -222,21 +229,26 @@ const colissionRectangle = (rectangle1, rectangle2) => {
 
 const timer = document.getElementById('timer');
 const info = document.getElementById('info');
-console.log(+timer.textContent);
+
+const determinateWinner = (player, enemy) => {
+    clearInterval(time)
+    info.style.opacity = 1;
+    if (player.life.currentLife > enemy.life.currentLife) {
+        info.textContent = `${player.name.toUpperCase()} WINS`
+    } else if (enemy.life.currentLife > player.life.currentLife) {
+        info.textContent = `${enemy.name.toUpperCase()} WINS`
+    } else {
+        info.textContent = `DRAW`
+    }
+}
+
 const time = setInterval(() => {
     if (+timer.textContent > 0) {
         timer.innerText = (+timer.textContent) - 1
-    }else{
-        clearInterval(time)
-        if (player.life.currentLife>enemy.life.currentLife) {
-            info.textContent=`${player.name.toUpperCase()} WINS`
-        }else if (enemy.life.currentLife>player.life.currentLife) {
-            info.textContent=`${enemy.name.toUpperCase()} WINS`
-        }else{
-            info.textContent=`DRAW`
-        }
+    } else {
+        determinateWinner(player, enemy)
     }
-    
+
 }, 1000)
 
 const animate = () => {
@@ -274,6 +286,11 @@ const animate = () => {
         const playerHealth = document.getElementById("player")
         if (player.life.currentLife > 0) player.life.currentLife -= player.damage
         playerHealth.style.width = `${player.life.currentLife > 0 ? ((player.life.currentLife * player.life.maxHealth) / 100) : 0}%`
+    }
+
+    if (enemy.life.currentLife <= 0 || player.life.currentLife <= 0) {
+        determinateWinner(player, enemy)
+
     }
 }
 
