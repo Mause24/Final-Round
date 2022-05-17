@@ -1,5 +1,5 @@
 class Fighter {
-    constructor(position, speed, color, height, width, lastKey, attackBox, attacking, cooldown, life, damage, name) {
+    constructor(position, speed, color, height, width, lastKey, attackBox, attacking, cooldown, life, damage, name, keysPressed) {
         this.position = position;
         this.speed = speed;
         this.color = color;
@@ -12,6 +12,7 @@ class Fighter {
         this.life = life;
         this.damage = damage;
         this.name = name;
+        this.keysPressed = keysPressed;
     }
 
     getPosition() {
@@ -49,7 +50,7 @@ class Fighter {
         this.position.x += this.speed.x;
         this.position.y += this.speed.y;
         this.draw()
-        if (this.position.y + this.height + this.speed.y >= canvas.height || this.position.y + this.height + this.speed.y <= this.height) {
+        if (this.position.y + this.height + this.speed.y >= canvas.height - GROUND || this.position.y + this.height + this.speed.y <= this.height) {
             this.speed.y = 0;
         } else {
             this.speed.y += GRAVITY;
@@ -78,10 +79,12 @@ class Fighter {
 }
 
 class Sprite {
-    constructor(position, height, width) {
+    constructor(position, height, width, imageSrc) {
         this.position = position;
         this.height = height;
         this.width = width;
+        this.image = new Image();
+        this.image.src = imageSrc;
     }
 
     getPosition() {
@@ -103,7 +106,9 @@ class Sprite {
         }
     }
 
-    draw() { }
+    draw() {
+        c.drawImage(this.image, this.position.x, this.position.y)
+    }
 
     update() {
         this.draw()
