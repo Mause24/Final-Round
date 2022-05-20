@@ -5,8 +5,8 @@ canvas.width = 1024;
 canvas.height = 576;
 
 c.fillRect(0, 0, canvas.width, canvas.height)
-const GROUND=95
 /* CONSTANTS */
+const GROUND = 95
 const GRAVITY = 0.7;
 const COMBOS = {
     player: {
@@ -43,6 +43,14 @@ const BACKGROUND = new Sprite(
     canvas.height,
     canvas.width,
     './img/background.png'
+);
+const SHOP = new Sprite(
+    { x: 640, y: canvas.height - GROUND - 352 },
+    200,
+    300,
+    './img/shop.png',
+    2.75,
+    6,
 );
 
 const ARROWS = {
@@ -117,8 +125,6 @@ const enemy = new Fighter(
 
 window.addEventListener('keydown', (e) => {
     if (!e.altKey && !e.ctrlKey && (CONTROLS.enemy.includes(e.key) || CONTROLS.player.includes(e.key))) {
-        console.log("PLAYER: " + player.keysPressed);
-        console.log("ENEMY: " + enemy.keysPressed);
         if (RESET.enemy !== -1 && CONTROLS.enemy.includes(e.key)) {
             clearTimeout(RESET.enemy)
             RESET.enemy = -1;
@@ -230,9 +236,9 @@ const animate = () => {
     /* c.fillStyle = 'white'
     c.fillRect(0, 300, canvas.width, 5) */
     BACKGROUND.update()
+    SHOP.update()
     player.update()
     enemy.update()
-
 
     player.speed.x = 0
     enemy.speed.x = 0
